@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-rails-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-rails-app
+  template:
+    metadata:
+      labels:
+        app: my-rails-app
+    spec:
+      containers:
+      - name: my-rails-app
+        image: sansugupta/my-rails-app # Use your Docker Hub image later
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DATABASE_HOST
+          value: my-postgres-db # Service name of your PostgreSQL
+        - name: DATABASE_USER
+          value: myuser
+        - name: DATABASE_PASSWORD
+          value: mypassword
+        - name: DATABASE_NAME
+          value: mydatabase
