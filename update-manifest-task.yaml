@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-manifest-task
+spec:
+  workspaces:
+  - name: source
+  steps:
+  - name: update-image-tag
+    image: ubuntu:latest
+    workingDir: $(workspaces.source.path)
+    command:
+      - /bin/bash
+    args:
+      - -c
+      - |
+        sed -i 's/my-rails-app.yaml/my-rails-app:latest/g' my-rails-app.yaml
+        git config user.email "tekton@example.com"
+        git config user.name "Tekton"
+        git add my-rails-app.yaml
+        git commit -m "Update image tag"
+        git config credential.helper 'store --file=/etc/git-credentials'
+        git push origin main
+    volumeMounts:
+    - name: git-credentials
+      mountPath: /etc/git-credentials
+  volumes:
+  - name: git-credentials
+    secret:
+      secretName: git-credentials

@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: sync-argocd-task
+spec:
+  steps:
+  - name: argocd-sync
+    image: argoproj/argocd
+    command:
+      - /bin/bash
+    args:
+      - -c
+      - |
+        argocd app sync my-rails-app

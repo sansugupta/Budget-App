@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kubectl-apply
+spec:
+  params:
+  - name: PATH_TO_YAML_FILE
+    type: string
+    description: Path to the YAML file to apply
+  - name: Yaml_parameters
+    type: string
+    description: 'Set parameters for the Yaml file'
+  steps:
+  - name: apply-manifests
+    image: lachlanevenson/k8s-kubectl:latest # Or another kubectl image
+    command:
+    - /bin/bash
+    args:
+    - -c
+    - |
+      sed -i "s@<your_dockerhub_username>/my-rails-app@$Yaml_parameters@g" $PATH_TO_YAML_FILE
+      kubectl apply -f $PATH_TO_YAML_FILE

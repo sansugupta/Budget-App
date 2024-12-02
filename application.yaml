@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-rails-app
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sansugupta/Budget-App.git
+    targetRevision: HEAD
+    path: . # Path to your manifests in the repo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
